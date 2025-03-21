@@ -20,4 +20,50 @@ model User {
   password String
   avatar   String?
   createdAt DateTime @default(now())
+  posts Post[]  //Post array because, single user can create multiple post
+} //  |
+ //   |
+  //  V
+model Post {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId 
+  title    String 
+  price Int 
+  address String
+  city  String
+  bedroom  Int
+  bathroom Int
+  latitude String
+  longitude  String
+  images   String[]
+  type Type
+  property Property
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId],references: [id]) // relation between post and user :-  it is done by UserId
+  userId String @db.ObjectId
+  postDetail PostDetail?
+}
+
+enum Type{
+  buy
+  rent
+}
+
+enum Property{
+  Hostel
+  PG
+  Flat
+}
+
+model PostDetail{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  desc String
+  utilities String? // ? means not required
+  pet String?
+  fees String?
+  size Int?
+  hospital Int?
+  bus Int?
+  restaurant Int?
+  post Post @relation(fields:[postId],references: [id])
+  postId String @db.ObjectId @unique  //Each Post will have a postDetail
 }
